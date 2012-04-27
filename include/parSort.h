@@ -1,18 +1,17 @@
+#ifndef __PAR_SORT_H__
+#define __PAR_SORT_H__
+
 //******************************************************************************
 // Course:  MPC Project
-// Author:  Andreas Butti
+// Author:  Andreas Butti, Andreas Bachmann
 // Purpose: MPC Sort Project
 //******************************************************************************
-
-#include <stdio.h>
-#include <stdlib.h>
 
 //******************************************************************************
 // API
 
 // type defintion für Sortierung
 typedef int sort_t;
-
 
 /**
  * - sort t *data: Array, Lange len
@@ -34,4 +33,6 @@ typedef int sort_t;
 void parSort(sort_t *data, int len, int nThreads, int thresh);
 
 //******************************************************************************
+
+#endif
 

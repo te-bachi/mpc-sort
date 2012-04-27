@@ -13,18 +13,13 @@
 #include "cpuinfo.h"
 
 //******************************************************************************
-// constant values
-
-#define MAX_THREADS  16
-
-//******************************************************************************
 // internal structure
 
 typedef struct {
 	sort_t *data;
-	int start;
-	int end;
-} sort_internal_t;
+	size_t start;
+	size_t end;
+} chunk_t;
 
 
 //******************************************************************************
@@ -39,9 +34,9 @@ int compare(const void *a, const void *b) {
 
 
 void *sortThread(void *arg) {
-    sort_internal_t *data = (sort_internal_t *)(arg);
+    chunk_t *chunk = (chunk_t *)(arg);
 
-	qsort(&data->data[data->start], data->end - data->start, sizeof(sort_t), compare);
+	qsort(&chunk->data[chunk->start], chunk->end - chunk->start, sizeof(sort_t), compare);
 
 	return NULL;
 }
@@ -49,68 +44,78 @@ void *sortThread(void *arg) {
 //******************************************************************************
 // API
 
-/**
- * - sort_t *data: Array, Lange len
- * - sort_t: numerischer Skalartyp definiert in parSort.h
- * 
- * - int len: Lange des Arrays, 100’000 ≤ len ≤ 1000’000.
- * - int nThreads: maximale Anzahl Threads
- * 
- * nThreads ≤ 0: Sortierverfahren wahlt Anzahl Threads selbst
- * 
- * - int thresh: Arraylange, ab welcher sequentiell sortiert werden soll
- *               thresh ≤ 0: Sortierverfahren wahlt thresh selbst
- * 
- * - mindestens einer der beiden Parameter nThreads resp. thresh muss 0 sein
- * 
- * - aufsteigend sortiert, Datenruckgabe in-place sortiert in data
- * - Starten und Stoppen der Threads in der Sortierfunktion parSort()
- */
 void parSort(sort_t *data, int len, int nThreads, int thresh) {
-
+    pthread_t th[nThreads];
+	chunk_t   chunk[nThreads];
+	//sort_t    copy[sizeof(sort_t) * len];
+	
+	int  chunkSize;
+	int  start;
+	long i;
+	//int  x;
+	
 	if(nThreads < 1) {
 		nThreads = getNumCpus();
 	}
-
-    pthread_t       th[nThreads];
-	sort_internal_t id[nThreads];
 	
-	int partCount = len / nThreads;
+	// allocate and copy data
+	//copy = (sort_t *) malloc(sizeof(sort_t) * len); 
+	//memcpy(copy, data, sizeof(sort_t) * len);
+	
+	// divide problem into chucks => set chunk size
+	chunkSize = len / nThreads;
+	start     = 0;
+	
+	// 
+	for (i = 0; i < nThreads; i++) {
+		chunk[i].start = start;
 
-	int start = 0;
-	// create threads and pass thread number
-	for (long i = 0; i < nThreads; i++) {
-		id[i].start = start;
-
+		// If this is the last thread
+		// chunk-end = array-length
 		if(i + 1 == nThreads) {
-			id[i].end = len;
+			chunk[i].end = len;
 		} else {
-			id[i].end = start + partCount;
+			chunk[i].end = start + chunkSize;
 		}
-		id[i].data = data;
-		start += partCount;
+		chunk[i].data = data;
+		start += chunkSize;
 
-		printf("%li: start=%i / end=%i\n", i, id[i].start, id[i].end);
+		// DEBUG
+		printf("%li: start=%i / end=%i\n", i, chunk[i].start, chunk[i].end);
 
-		pthread_create(&th[i], NULL, sortThread, (void *)&id[i]);
+		// create threads and pass one of the chunks
+		pthread_create(&th[i], NULL, sortThread, (void *)&chunk[i]);
 	}
 
 	// wait for threads to terminate    
-	for (int i = 0; i < nThreads; i++) {
+	for (i = 0; i < nThreads; i++) {
 		pthread_join(th[i], NULL);
 	}
 
-	int x = 0;
-	for(int i = 0; i < len; i++) {
+	// DEBUG
+	/*
+	x = 0;
+	for(i = 0; i < len; i++) {
 		printf("%02i, ", data[i]);
 
-		if(id[x].end == i + 1) {
+		if(chunk[x].end == i + 1) {
 			x++;
 			printf("\n\n");
 		}
 	}
+	
+	x = 0;
+	for(i = 0; i < len; i++) {
+		printf("%02i, ", copy[i]);
 
-	// TODO mergen
+		if(chunk[x].end == i + 1) {
+			x++;
+			printf("\n\n");
+		}
+	}
+	*/
+	// Merge
+	
 }
 
 

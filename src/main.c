@@ -26,13 +26,13 @@ int main(int argc, char *argv[]) {
 	
 	nThreads = 0;
 	
+	// arg 1: number of threads
 	if (argc > 1) {
 	    nThreads= atoi(argv[1]);
 	}
 	
-	// arg 1: number of threads
+	// limit number of threads
 	nThreads = (nThreads > MAX_THREADS) ? MAX_THREADS : nThreads;
-
 
 	// setup timers
 	initCTimer(cp, PROCESS);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 	startCTimer(cp);
 	startCTimer(ce);
 
-	parSort(dummySortDataMini, sizeof(dummySortDataMini) / sizeof(int), nThreads, 0);
+	parSort(dummySortDataMicro, sizeof(dummySortDataMicro) / sizeof(int), nThreads, 0);
 
     stopCTimer(cp);
     stopCTimer(ce);

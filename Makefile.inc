@@ -1,7 +1,7 @@
 
 CC       = gcc
 AR       = ar
-CFLAGS   = -I$(TOPLEVEL)/include -D_REENTRANT -Wall -std=gnu99
+CFLAGS   = -I$(TOPLEVEL)/include -D_REENTRANT -Wall -std=gnu99 -ggdb
 LDFLAGS  = -lpthread -lrt
 OBJECT   = $(SOURCES:%.c=%.o)
 

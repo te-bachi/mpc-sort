@@ -3,6 +3,8 @@ TOPLEVEL = .
 SUBDIRS = \
     obj
 
+CLEANFILES = sort05
+
 all: all_sub sort05
 
 include $(TOPLEVEL)/Makefile.inc
