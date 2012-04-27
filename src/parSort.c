@@ -17,8 +17,8 @@
 
 typedef struct {
 	sort_t *data;
-	size_t start;
-	size_t end;
+	int start;
+	int end;
 } chunk_t;
 
 
@@ -35,10 +35,31 @@ int compare(const void *a, const void *b) {
 
 void *sortThread(void *arg) {
     chunk_t *chunk = (chunk_t *)(arg);
-
+    
 	qsort(&chunk->data[chunk->start], chunk->end - chunk->start, sizeof(sort_t), compare);
-
+    
 	return NULL;
+}
+
+sort_t *getLeast(chunk_t *chunk, int nThreads) {
+    int    i;
+    sort_t *one;
+    sort_t *other;
+    
+    one = &chunk[0].data[chunk[0].start];
+    printf("first: %i\n", *one);
+    for (i = 1; i < nThreads; i++) {
+        other = &chunk[i].data[chunk[i].start];
+        printf("compare: %i < %i\n", *one, *other);
+        if (*other < *one) {
+            printf("switch\n");
+            one = other;
+        }
+    }
+    
+    // TODO: start raufzählen
+    
+    return one;
 }
 
 //******************************************************************************
@@ -47,20 +68,21 @@ void *sortThread(void *arg) {
 void parSort(sort_t *data, int len, int nThreads, int thresh) {
     pthread_t th[nThreads];
 	chunk_t   chunk[nThreads];
-	//sort_t    copy[sizeof(sort_t) * len];
+	sort_t    chunkData[sizeof(sort_t) * len];
+	sort_t    *ptr;
 	
 	int  chunkSize;
 	int  start;
-	long i;
-	//int  x;
+	long i, k;
+	int  x;
 	
+	// BUG???
 	if(nThreads < 1) {
 		nThreads = getNumCpus();
 	}
 	
-	// allocate and copy data
-	//copy = (sort_t *) malloc(sizeof(sort_t) * len); 
-	//memcpy(copy, data, sizeof(sort_t) * len);
+	// copy data
+	memcpy(chunkData, data, sizeof(sort_t) * len);
 	
 	// divide problem into chucks => set chunk size
 	chunkSize = len / nThreads;
@@ -77,7 +99,7 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
 		} else {
 			chunk[i].end = start + chunkSize;
 		}
-		chunk[i].data = data;
+		chunk[i].data = chunkData;
 		start += chunkSize;
 
 		// DEBUG
@@ -92,8 +114,8 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
 		pthread_join(th[i], NULL);
 	}
 
-	// DEBUG
-	/*
+	// DEBUG,
+	printf("before:\n");
 	x = 0;
 	for(i = 0; i < len; i++) {
 		printf("%02i, ", data[i]);
@@ -104,18 +126,23 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
 		}
 	}
 	
+	printf("after:\n");
 	x = 0;
 	for(i = 0; i < len; i++) {
-		printf("%02i, ", copy[i]);
+		printf("%02i, ", chunkData[i]);
 
 		if(chunk[x].end == i + 1) {
 			x++;
 			printf("\n\n");
 		}
 	}
-	*/
-	// Merge
 	
+	// Merge
+	// over original array-length
+	printf("least: %i\n", *getLeast(chunk, nThreads));
+	//for (i = 0; i < len; i++) {
+	    
+	//}
 }
 
 
