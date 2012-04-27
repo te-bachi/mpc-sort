@@ -7,8 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+
 #include "mtimer.h"
 #include "parSort.h"
+#include "cpuinfo.h"
 
 //******************************************************************************
 // constant values
@@ -65,13 +67,14 @@ void *sortThread(void *arg) {
  * - Starten und Stoppen der Threads in der Sortierfunktion parSort()
  */
 void parSort(sort_t *data, int len, int nThreads, int thresh) {
-	// TODO berechnen der Threads!!
+
 	if(nThreads < 1) {
-		nThreads = 4;
+		nThreads = getNumCpus();
 	}
 
-    pthread_t th[nThreads];
+    pthread_t       th[nThreads];
 	sort_internal_t id[nThreads];
+	
 	int partCount = len / nThreads;
 
 	int start = 0;

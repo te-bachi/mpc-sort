@@ -20,16 +20,17 @@
 // main program
 
 int main(int argc, char *argv[]) {
-	ctimer_t cp, ce;
-
-	// enforce one argument
-	if (argc < 2) {
-		printf("give number of Threads\n");
-		exit(0);
+	ctimer_t cp;
+	ctimer_t ce;
+	int nThreads;
+	
+	nThreads = 0;
+	
+	if (argc > 1) {
+	    nThreads= atoi(argv[1]);
 	}
-
+	
 	// arg 1: number of threads
-	int nThreads = atoi(argv[1]);
 	nThreads = (nThreads > MAX_THREADS) ? MAX_THREADS : nThreads;
 
 
