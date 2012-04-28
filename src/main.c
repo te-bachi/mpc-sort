@@ -33,7 +33,14 @@ int main(int argc, char *argv[]) {
 	
 	// limit number of threads
 	nThreads = (nThreads > MAX_THREADS) ? MAX_THREADS : nThreads;
-
+	
+    // DEBUG
+    printf("before:\n");
+    for (int i = 0; i < sizeof(dummySortDataMicro) / sizeof(int); i++) {
+        printf("%d ", dummySortDataMicro[i]);
+    }
+    printf("\n");
+	
 	// setup timers
 	initCTimer(cp, PROCESS);
 	initCTimer(ce, MONOTONIC);
@@ -46,6 +53,13 @@ int main(int argc, char *argv[]) {
     stopCTimer(ce);
     double ptime = getCTime(cp);
     double etime = getCTime(ce);
+    
+    // DEBUG
+    printf("after:\n");
+    for (int i = 0; i < sizeof(dummySortDataMicro) / sizeof(int); i++) {
+        printf("%d ", dummySortDataMicro[i]);
+    }
+    printf("\n");
 
     printf("Elapsed: %2.2f, process %2.2f, "\
            "average per CPU %2.2f)\n", 

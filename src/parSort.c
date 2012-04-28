@@ -41,41 +41,59 @@ void *sortThread(void *arg) {
     return NULL;
 }
 
-/*
-sort_t *getLeast(chunk_t *chunk, int nThreads) {
-    int    i;
-    chunk_t *oneChunk;
-    chunk_t *otherChunk;
-    sort_t  *oneData;
-    sort_t  *otherData;
-    
-    // .
+void resetChunks(chunk_t *chunks, int nThreads) {
+    int i;
     
     for (i = 0; i < nThreads; i++) {
-        if (chunk[i].start < chunk[i].end) {
-            one       = &chunk[i];
-            otherData = one->data[one->start]
+        chunks[i].idx = 0;
+    }
+}
+
+sort_t *getLeast(chunk_t *chunks, int nThreads) {
+    chunk_t *chunkOne;
+    chunk_t *chunkTwo;
+    sort_t  *dataOne;
+    sort_t  *dataTwo;
+    int     start;
+    int     i;
+    
+    chunkOne = NULL;
+    
+    // .
+    for (i = 0; i < nThreads; i++) {
+        if (chunks[i].idx < chunks[i].len) {
+            chunkOne = &chunks[i];
+            dataOne  = &chunkOne->data[chunkOne->idx];
+            start    = i + 1;
             break;
         }
     }
     
-    printf("first: %i\n", *one);
-    for (i = 0; i < nThreads; i++) {
-        otherChunk = &chunk[i];
-        otherData  = otherChunk->data[otherChunk->start];
-        
-        printf("compare: %i < %i\n", *one, *other);
-        if (*other < *one) {
-            printf("switch\n");
-            one = other;
+    //printf("--- first ---\n");
+    //printf("chunk i=%d idx=%d data=%d\n", start - 1, chunkOne->idx, *dataOne);
+    
+    for (i = start; i < nThreads; i++) {
+        if (chunks[i].idx < chunks[i].len) {
+            chunkTwo = &chunks[i];
+            dataTwo  = &chunkTwo->data[chunkTwo->idx];
+            
+            //printf("chunk i=%d idx=%d data=%d\n", i, chunkTwo->idx, *dataTwo);
+            
+            //printf("compare: %i < %i\n", *dataOne, *dataTwo);
+            if (*dataTwo < *dataOne) {
+                //printf("switch\n");
+                chunkOne = chunkTwo;
+                dataOne  = &chunkOne->data[chunkOne->idx];
+            }
         }
     }
     
-    // TODO: start raufzählen
+    if (chunkOne != NULL) {
+        chunkOne->idx++;
+    }
     
-    return one;
+    return dataOne;
 }
-*/
 
 //******************************************************************************
 // API
@@ -86,8 +104,7 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
     
     int         chunkSize;
     long        start;
-    long        i, k;
-    int         x;
+    long        i;
     
     // BUG???
     if(nThreads < 1) {
@@ -98,7 +115,7 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
     chunkSize = len / nThreads;
     start     = 0;
     
-    printf("sizeof(sort_t) = %d bytes\n", sizeof(sort_t));
+    //printf("sizeof(sort_t) = %d bytes\n", sizeof(sort_t));
     
     // 
     for (i = 0; i < nThreads; i++) {
@@ -113,7 +130,7 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
         }
         
         size_t allocBytes = chunks[i].len * sizeof(sort_t);
-        printf("alloc = %d bytes\n", allocBytes);
+        //printf("alloc = %d bytes\n", allocBytes);
         chunks[i].data = (sort_t *) malloc(allocBytes);
         memcpy(chunks[i].data, &data[start], allocBytes);
 
@@ -132,6 +149,7 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
     }
 
     // DEBUG
+    /*
     printf("before:\n");
     x = 0;
     for(i = 0; i < len; i++) {
@@ -148,13 +166,15 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
         }
         printf("\n");
     }
+    */
     
     // Merge
     // over original array-length
-    //printf("least: %i\n", *getLeast(chunk, nThreads));
-    //for (i = 0; i < len; i++) {
-        
-    //}
+    resetChunks(chunks, nThreads);
+    for (i = 0; i < len; i++) {
+        //printf("least: %i\n", *getLeast(chunks, nThreads));
+        data[i] = *getLeast(chunks, nThreads);
+    }
     
     // Deallocate memory
 

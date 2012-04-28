@@ -4,7 +4,12 @@
 // Purpose: Data to sort for testing
 //******************************************************************************
 
-int dummySortDataMicro[] = { 5, 2, 8, 4, 6, 9, 7, 1, 3 };
+int dummySortDataMicro[] = {
+    5,  20,  8,  4,
+    6,   9, 70,  1,
+    3,  10,  3,  5,
+    9,   5,  1
+};
 
 int dummySortDataMini[] = {
 	   100,     99,     98,     97,     96,     95,    101,     93,     92,     91,
