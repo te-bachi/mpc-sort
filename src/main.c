@@ -23,6 +23,8 @@ int main(int argc, char *argv[]) {
 	ctimer_t cp;
 	ctimer_t ce;
 	int nThreads;
+	sort_t *sort    = dummySortDataMicro;
+	size_t  sortLen = sizeof(dummySortDataMicro) / sizeof(int);
 	
 	nThreads = 0;
 	
@@ -36,8 +38,8 @@ int main(int argc, char *argv[]) {
 	
     // DEBUG
     printf("before:\n");
-    for (int i = 0; i < sizeof(dummySortDataMicro) / sizeof(int); i++) {
-        printf("%d ", dummySortDataMicro[i]);
+    for (int i = 0; i < sortLen; i++) {
+        printf("%d ", sort[i]);
     }
     printf("\n");
 	
@@ -47,7 +49,7 @@ int main(int argc, char *argv[]) {
 	startCTimer(cp);
 	startCTimer(ce);
 
-	parSort(dummySortDataMicro, sizeof(dummySortDataMicro) / sizeof(int), nThreads, 0);
+	parSort(sort, sortLen, nThreads, 0);
 
     stopCTimer(cp);
     stopCTimer(ce);
@@ -56,8 +58,8 @@ int main(int argc, char *argv[]) {
     
     // DEBUG
     printf("after:\n");
-    for (int i = 0; i < sizeof(dummySortDataMicro) / sizeof(int); i++) {
-        printf("%d ", dummySortDataMicro[i]);
+    for (int i = 0; i < sortLen; i++) {
+        printf("%d ", sort[i]);
     }
     printf("\n");
 
