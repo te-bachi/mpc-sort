@@ -294,17 +294,33 @@ r Vorteil beim Treffen von Entscheidungen sein.
 \end_layout
 
 \begin_layout Standard
-Ziel unseres Projektes ist ein paralleles Sortier-Verfahren zu implementieren.
- Dabei soll eine unsortierte Liste in Abschnitte unterteil
-t
-\lang german-ch
- und parallel auf konventioneller Methode sortiert werden.
- Zum Schluss führt der Algorithmus die sortierten Abschnitte wieder zu einer
- Liste zusammen.
+Als Studierende des Studiengangs Informatik gefassen wir uns in diesem Fach
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Multicore & Parallel Computing
+\begin_inset Quotes erd
+\end_inset
+
+ mit der Programmierung paralleler Software.
+ Ziel unseres Projektes ist ein paralleles Sortier-Verfahren zu implementieren.
+ 
 \end_layout
 
 \begin_layout Section
 Vorgehen 
+\end_layout
+
+\begin_layout Standard
+Die Aufgabenstellung bestand darin für eine Shared Memory Multi-Core Architektur
+ ein geeignetes Sortierverfahren zu wahlt und zu implementiert.
+ Dabei soll ein unsortiertes Array in Abschnitte unterteil
+t
+\lang german-ch
+ und parallel auf konventioneller Methode sortiert werden.
+ Zum Schluss führt der Algorithmus die sortierten Abschnitte wieder zu einem
+ Array zusammen.
 \end_layout
 
 \begin_layout Standard
