@@ -41,7 +41,10 @@ void *sortThread(void *arg) {
     return NULL;
 }
 
-void resetChunks(chunk_t *chunks, int nThreads) {
+//******************************************************************************
+// reset chunk indexes
+
+void resetIndexes(chunk_t *chunks, int nThreads) {
     int i;
     
     for (i = 0; i < nThreads; i++) {
@@ -49,6 +52,26 @@ void resetChunks(chunk_t *chunks, int nThreads) {
     }
 }
 
+//******************************************************************************
+// get least data entry of a chunk-list
+
+/**
+ * ex. nThreads = 4
+ *
+ * chunks[i].idx = 0
+ * chunks[i].len = 10
+ * 
+ *            +---+------
+ * chunks[0]  | 5 | [...]
+ *            +---+------
+ * chunks[1]  | 3 | [...]
+ *            +---+------
+ * chunks[2]  | 1 | [...]
+ *            +---+------
+ * chunks[3]  | 4 | [...]
+ *            +---+------
+ *
+ */
 sort_t *getLeast(chunk_t *chunks, int nThreads) {
     chunk_t *chunkOne;
     chunk_t *chunkTwo;
@@ -59,35 +82,35 @@ sort_t *getLeast(chunk_t *chunks, int nThreads) {
     
     chunkOne = NULL;
     
-    // .
+    // take first data entry
     for (i = 0; i < nThreads; i++) {
+        // take only, if index is not out of range
         if (chunks[i].idx < chunks[i].len) {
             chunkOne = &chunks[i];
             dataOne  = &chunkOne->data[chunkOne->idx];
+            
+            // start condition for next loop
             start    = i + 1;
             break;
         }
     }
     
-    //printf("--- first ---\n");
-    //printf("chunk i=%d idx=%d data=%d\n", start - 1, chunkOne->idx, *dataOne);
-    
+    // loop only over the rest of the chunk-list
     for (i = start; i < nThreads; i++) {
         if (chunks[i].idx < chunks[i].len) {
             chunkTwo = &chunks[i];
             dataTwo  = &chunkTwo->data[chunkTwo->idx];
             
-            //printf("chunk i=%d idx=%d data=%d\n", i, chunkTwo->idx, *dataTwo);
-            
-            //printf("compare: %i < %i\n", *dataOne, *dataTwo);
+            // is it less than?
             if (*dataTwo < *dataOne) {
-                //printf("switch\n");
+                // overwrite
                 chunkOne = chunkTwo;
                 dataOne  = &chunkOne->data[chunkOne->idx];
             }
         }
     }
     
+    // increment index of least data entry
     if (chunkOne != NULL) {
         chunkOne->idx++;
     }
@@ -103,6 +126,7 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
     chunk_t     chunks[nThreads];
     
     int         chunkSize;
+    size_t      allocBytes;
     long        start;
     long        i;
     
@@ -115,22 +139,18 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
     chunkSize = len / nThreads;
     start     = 0;
     
-    //printf("sizeof(sort_t) = %d bytes\n", sizeof(sort_t));
-    
     // 
     for (i = 0; i < nThreads; i++) {
         
-        // If this is the last thread
-        // chunk-end = array-length
-        // minimum of theads = 1
+        // if this is the last thread => take the rest
         if(i + 1 == nThreads) {
             chunks[i].len = len - ((nThreads - 1) * chunkSize);
         } else {
             chunks[i].len = chunkSize;
         }
         
-        size_t allocBytes = chunks[i].len * sizeof(sort_t);
-        //printf("alloc = %d bytes\n", allocBytes);
+        // allocate chunk data and copy it
+        allocBytes = chunks[i].len * sizeof(sort_t);
         chunks[i].data = (sort_t *) malloc(allocBytes);
         memcpy(chunks[i].data, &data[start], allocBytes);
 
@@ -147,37 +167,14 @@ void parSort(sort_t *data, int len, int nThreads, int thresh) {
     for (i = 0; i < nThreads; i++) {
         pthread_join(th[i], NULL);
     }
-
-    // DEBUG
-    /*
-    printf("before:\n");
-    x = 0;
-    for(i = 0; i < len; i++) {
-        printf("%02i, ", data[i]);
-    }
-    printf("\n");
     
-    
-    printf("after:\n");
-    x = 0;
-    for(i = 0; i < nThreads; i++) {
-        for (k = 0; k < chunks[i].len; k++) {
-            printf("%02i, ", chunks[i].data[k]);
-        }
-        printf("\n");
-    }
-    */
-    
-    // Merge
-    // over original array-length
-    resetChunks(chunks, nThreads);
+    // merge chunk list into original data-array
+    resetIndexes(chunks, nThreads);
     for (i = 0; i < len; i++) {
-        //printf("least: %i\n", *getLeast(chunks, nThreads));
         data[i] = *getLeast(chunks, nThreads);
     }
     
-    // Deallocate memory
-
+    // free chunk data
     for (i = 0; i < nThreads; i++) {
         free(chunks[i].data);
     }
