@@ -3,16 +3,6 @@
 \begin_document
 \begin_header
 \textclass scrartcl
-\begin_preamble
-\usepackage{anysize}
-\pagenumbering{roman}
-\let\myTOC\tableofcontents
-\renewcommand\tableofcontents{%
-\myTOC
-\clearpage
-\pagenumbering{arabic}
-}
-\end_preamble
 \use_default_options true
 \begin_modules
 theorems-ams
@@ -275,22 +265,6 @@ thispagestyle{empty}
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Newpage newpage
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-\begin_inset CommandInset toc
-LatexCommand tableofcontents
-
-\end_inset
-
-
 \begin_inset Newpage newpage
 \end_inset
 
@@ -298,15 +272,35 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Section
-Einführung 
+Einführung
 \end_layout
 
 \begin_layout Standard
-was
+Ordnung in eine unsortierte Liste von Einträgen zu bringen kann ein grundlegende
+r Vorteil beim Treffen von Entscheidungen sein.
+ Wenn ich den niedrigsten Preis aller eBay-Angebote an Spannungsreglern
+ suche, hilft mir die Sortier-Funktion bei der Auswahl.
+ Doch je grösser eine Liste ist, desto mehr Vergleiche zwischen den Einträgen
+ werden benötigt.
+ Durch die Power Wall kann die Leistung pro Recheneinheit nicht mehr erhöht
+ werden, was mit umfandreicheren Problemen zu grösseren Laufzeiten führt.
+ Als Endanwender ärgert man sich zwar, doch für Wirtschaft und Wissenschaft
+ kann Geld verloren gehen oder Simulationen nicht durchgeführt werden.
+ Die Hardware-Hersteller umgingen die Leistungsgrenze, indem sie statt die
+ Taktfrequenz zu erhöhen einfach mehrere Recheneinhehiten auf einen Chip
+ integrierten.
+ Sie schoben das eigentliche Problem der Performance auf den Programmierer
+ ab.
 \end_layout
 
 \begin_layout Standard
-Problemstellung, Ziel 
+Ziel unseres Projektes ist ein paralleles Sortier-Verfahren zu implementieren.
+ Dabei soll eine unsortierte Liste in Abschnitte unterteil
+t
+\lang german-ch
+ und parallel auf konventioneller Methode sortiert werden.
+ Zum Schluss führt der Algorithmus die sortierten Abschnitte wieder zu einer
+ Liste zusammen.
 \end_layout
 
 \begin_layout Section
@@ -322,7 +316,7 @@ Vorgehen, Konzept, Rahmenbedingungen, Software-Design
 \end_layout
 
 \begin_layout Section
-Resultate 
+Resultate
 \end_layout
 
 \begin_layout Standard
