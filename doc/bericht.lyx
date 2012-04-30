@@ -378,17 +378,6 @@ name "fig:Original-Array"
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\begin{equation}
-\textrm{Abschnitt (Chunk) Länge =}\frac{\textrm{Original Array Länge}}{\textrm{Anzahl Threads}}=\frac{12}{4}=3\label{eq:abschnitt}
-\end{equation}
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \begin_inset Float figure
 placement b
 wide false
@@ -431,11 +420,32 @@ name "fig:Aufteilen-in-Abschnitte"
 \end_layout
 
 \begin_layout Standard
-wie
+Bei einer Original Array-Länge von 12 und vier Threads resultiert eine Abschnitt
+-Länge von 3 (Gleichung 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:abschnitt"
+
+\end_inset
+
+), wobei der letzte Abschnitt die restlichen Einträge beinhaltet und von
+ der Abstandslänge differenziert.
 \end_layout
 
 \begin_layout Standard
-Vorgehen, Konzept, Rahmenbedingungen, Software-Design 
+\begin_inset Formula 
+\begin{equation}
+\textrm{Abschnitt (Chunk) Länge =}\frac{\textrm{Original Array Länge}}{\textrm{Anzahl Threads}}=\frac{12}{4}=3\label{eq:abschnitt}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Unser Algorithmus kann nur Primitive Datentypen sortieren.
+ Dabei wird nur Standart C und die PThread-Bibliothek verwendet.
 \end_layout
 
 \begin_layout Section
