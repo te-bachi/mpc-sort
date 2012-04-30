@@ -443,11 +443,15 @@ Resultate
 \end_layout
 
 \begin_layout Standard
-was herausgekommen ist 
+Der Speedup bei 2 Cores beträgt 177%, was angesichts des Mergen kein Schlechter
+ Wert ist.
+ Wir erhalten somit eine Effizienz von 88%.
 \end_layout
 
 \begin_layout Standard
-Erreichte Resultate, Interpretation 
+Bei einem Dualcore mit Hyperthreading mit 4 Threads erreichen wir einen
+ Speedup von 268%, und erreichen somit nur noch eine Effizienz von 67%,
+ jedoch liegt das auch noch am Hyperthreading.
 \end_layout
 
 \begin_layout Section
@@ -455,12 +459,12 @@ Reflexion
 \end_layout
 
 \begin_layout Standard
-meine Schlussfolgerungen 
-\end_layout
-
-\begin_layout Standard
-(aufgetauchte) Probleme, was habe ich gelernt, Ausblick, etc.
- 
+Parallelisierung muss nicht immer kompliziert sein, schon mit einfachen
+ Lösungen ist es möglich eine Applikation stark zu beschleunigen.
+ Natürlich konnten wir so nicht alles herausholen, um den grösstmöglichen
+ Speedup zu erreichen müssten wir neue Algorithmen entwickeln, was natürlich
+ nicht so einfach möglichst.
+ Trozdem sind wir zufrieden mit dem erreichten Ergebniss...
 \end_layout
 
 \end_body
