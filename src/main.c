@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
 	ctimer_t cp;
 	ctimer_t ce;
 	int nThreads;
-	sort_t *sort    = dummySortDataMicro;
-	size_t  sortLen = sizeof(dummySortDataMicro) / sizeof(int);
+	sort_t *sort    = dummyDoubleSortData;
+	size_t  sortLen = sizeof(dummyDoubleSortData) / sizeof(sort_t);
 	
 	nThreads = 0;
 	
@@ -37,11 +37,13 @@ int main(int argc, char *argv[]) {
 	nThreads = (nThreads > MAX_THREADS) ? MAX_THREADS : nThreads;
 	
     // DEBUG
+    /*
     printf("before:\n");
     for (int i = 0; i < sortLen; i++) {
         printf("%d ", sort[i]);
     }
     printf("\n");
+	*/
 	
 	// setup timers
 	initCTimer(cp, PROCESS);
@@ -59,10 +61,13 @@ int main(int argc, char *argv[]) {
     // DEBUG
     printf("after:\n");
     for (int i = 0; i < sortLen; i++) {
-        printf("%d ", sort[i]);
+        printf("%12.4f ", sort[i]);
+        if (i != 0 && i % 10 == 0) {
+            printf("\n");
+        }
     }
     printf("\n");
-
+    
     printf("Elapsed: %2.2f, process %2.2f, "\
            "average per CPU %2.2f)\n", 
                     etime, ptime, ptime/((double)nThreads));

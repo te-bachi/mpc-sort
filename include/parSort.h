@@ -11,7 +11,7 @@
 // API
 
 // type defintion für Sortierung
-typedef int sort_t;
+typedef double sort_t;
 
 /**
  * - sort t *data: Array, Lange len

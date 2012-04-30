@@ -314,13 +314,120 @@ Vorgehen
 
 \begin_layout Standard
 Die Aufgabenstellung bestand darin für eine Shared Memory Multi-Core Architektur
- ein geeignetes Sortierverfahren zu wahlt und zu implementiert.
- Dabei soll ein unsortiertes Array in Abschnitte unterteil
-t
-\lang german-ch
- und parallel auf konventioneller Methode sortiert werden.
+ ein geeignetes Sortierverfahren zu wählen und zu implementieren.
+ Dabei soll ein unsortiertes Array (Abbildung 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Original-Array"
+
+\end_inset
+
+) in Abschnitte unterteilt und parallel auf konventionelle Methode sortiert
+ werden.
  Zum Schluss führt der Algorithmus die sortierten Abschnitte wieder zu einem
- Array zusammen.
+ Array zusammen (Abbildung 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Aufteilen-in-Abschnitte"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement b
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename array_original.eps
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Original Array
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Original-Array"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\textrm{Abschnitt (Chunk) Länge =}\frac{\textrm{Original Array Länge}}{\textrm{Anzahl Threads}}=\frac{12}{4}=3\label{eq:abschnitt}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement b
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename divide_and_conquer.eps
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Aufteilen in Abschnitte, Sortieren und wieder Zusammenfügen
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Aufteilen-in-Abschnitte"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
